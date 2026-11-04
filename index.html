@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="description" content="LIMONEEZ — fresh design, everyday movement. Discover our sneaker prototypes." />
+  <title>LIMONEEZ® — Move Different</title>
+  <style>
+    :root {
+      --orange: #f07832;
+      --orange-dark: #d95f1d;
+      --blue: #527fae;
+      --blue-pale: #eaf3fb;
+      --ink: #17191c;
+      --muted: #707781;
+      --line: rgba(20, 30, 40, .10);
+      --glass: rgba(255,255,255,.72);
+      --shadow: 0 18px 55px rgba(27, 46, 67, .10);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink); background: #fff; line-height: 1.5; overflow-x: hidden;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin: auto; }
+    .announcement {
+      background: var(--ink); color: #fff; text-align: center; padding: 9px 16px;
+      font-size: 10px; letter-spacing: .19em; text-transform: uppercase;
+    }
+    .nav-shell {
+      position: fixed; z-index: 50; top: 38px; left: 0; width: 100%; padding: 13px 0;
+      transition: top .3s ease, padding .3s ease;
+    }
+    .nav-shell.scrolled { top: 8px; }
+    .nav {
+      width: min(1160px, calc(100% - 36px)); margin: auto; height: 68px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
+      border: 1px solid rgba(255,255,255,.8); border-radius: 20px;
+      background: rgba(255,255,255,.70); backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      box-shadow: 0 8px 35px rgba(31,49,68,.08);
+    }
+    .logo { font-size: 23px; font-weight: 950; letter-spacing: -.075em; }
+    .logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 34px; align-items: center; }
+    .nav-links a { color: #41464d; font-size: 12px; font-weight: 650; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--orange-dark); }
+    .nav-cta, .btn {
+      border: 0; border-radius: 999px; padding: 13px 21px; font-size: 12px; font-weight: 750;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .nav-cta, .btn-primary { background: var(--orange); color: #fff; box-shadow: 0 9px 22px rgba(240,120,50,.20); }
+    .nav-cta:hover, .btn-primary:hover { transform: translateY(-3px); background: var(--orange-dark); box-shadow: 0 14px 28px rgba(240,120,50,.28); }
+    .btn-secondary { background: rgba(255,255,255,.72); border: 1px solid rgba(30,45,60,.13); color: var(--ink); }
+    .btn-secondary:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .menu-toggle { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.7); }
+    .menu-toggle span { display: block; width: 17px; height: 2px; background: var(--ink); margin: 4px auto; transition: .25s; }
+    .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(3px) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; z-index: 49; top: 115px; right: 22px; width: min(360px, calc(100% - 44px));
+      padding: 25px; border: 1px solid rgba(255,255,255,.9); border-radius: 25px;
+      background: rgba(255,255,255,.76); backdrop-filter: blur(28px) saturate(170%);
+      -webkit-backdrop-filter: blur(28px) saturate(170%); box-shadow: 0 24px 70px rgba(26,47,69,.17);
+    }
+    .mobile-menu.open { display: block; animation: menuIn .25s ease both; }
+    .mobile-menu a { display: flex; align-items: center; justify-content: space-between; padding: 16px 2px; border-bottom: 1px solid var(--line); font-weight: 750; }
+    .mobile-menu a span { color: var(--orange); font-size: 12px; }
+    .mobile-menu .btn { width: 100%; margin-top: 19px; }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-8px) scale(.98); } to { opacity: 1; transform: none; } }
+
+    .hero {
+      min-height: 760px; padding: 190px 0 95px; position: relative; overflow: hidden;
+      background: radial-gradient(circle at 78% 37%, rgba(207,229,248,.65), transparent 30%),
+                  radial-gradient(circle at 14% 70%, rgba(255,224,202,.38), transparent 28%), #fff;
+    }
+    .hero:before { content:""; position:absolute; width:550px; height:550px; border:1px solid rgba(82,127,174,.12); border-radius:50%; right:-170px; top:90px; }
+    .hero-grid { display:grid; grid-template-columns: .92fr 1.08fr; align-items:center; gap:35px; position:relative; z-index:1; }
+    .eyebrow { display:inline-flex; align-items:center; gap:10px; color:var(--orange-dark); font-size:10px; font-weight:850; letter-spacing:.2em; text-transform:uppercase; }
+    .eyebrow:before { content:""; width:25px; height:1px; background:var(--orange); }
+    h1 { font-size: clamp(58px, 7.5vw, 104px); line-height:.91; letter-spacing:-.085em; margin:24px 0; font-weight:900; }
+    h1 em { color:var(--orange); font-style:normal; }
+    .hero-copy { max-width:420px; color:var(--muted); font-size:15px; line-height:1.8; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:31px; }
+    .hero-note { margin-top:45px; display:flex; align-items:center; gap:12px; color:#7d858e; font-size:10px; letter-spacing:.13em; text-transform:uppercase; }
+    .hero-note b { color:var(--ink); }
+    .hero-art { min-height:440px; display:grid; place-items:center; position:relative; }
+    .orbit { position:absolute; width:min(490px, 90%); aspect-ratio:1; border:1px solid rgba(82,127,174,.18); border-radius:50%; }
+    .orbit:before, .orbit:after { content:""; position:absolute; border:1px solid rgba(82,127,174,.12); border-radius:50%; inset:35px; }
+    .orbit:after { inset:75px; }
+    .shoe-visual { width:min(100%, 570px); position:relative; z-index:2; filter:drop-shadow(0 34px 22px rgba(42,57,74,.18)); transform:rotate(-12deg); animation:floatShoe 5s ease-in-out infinite; }
+    @keyframes floatShoe { 0%,100% { transform:translateY(0) rotate(-12deg); } 50% { transform:translateY(-13px) rotate(-9deg); } }
+    .floating-tag { position:absolute; z-index:3; padding:13px 17px; border:1px solid rgba(255,255,255,.95); border-radius:16px; background:rgba(255,255,255,.68); backdrop-filter:blur(18px); box-shadow:var(--shadow); font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
+    .floating-tag strong { display:block; font-size:14px; letter-spacing:0; margin-top:3px; }
+    .tag-one { top:15%; right:0; } .tag-two { bottom:14%; left:0; }
+    .scroll-cue { position:absolute; bottom:25px; left:50%; transform:translateX(-50%); font-size:9px; color:#9aa1a9; letter-spacing:.2em; text-transform:uppercase; }
+
+    .ticker { overflow:hidden; background:var(--orange); color:#fff; padding:14px 0; white-space:nowrap; }
+    .ticker-track { display:inline-flex; gap:38px; animation:marquee 26s linear infinite; font-size:11px; font-weight:850; letter-spacing:.18em; }
+    @keyframes marquee { to { transform:translateX(-50%); } }
+    section { padding:110px 0; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:25px; margin-bottom:42px; }
+    .section-head h2, .story h2 { font-size:clamp(38px,5vw,64px); line-height:.98; letter-spacing:-.07em; margin-top:15px; }
+    .section-head p { max-width:340px; color:var(--muted); font-size:13px; line-height:1.8; }
+    .collection { background:#fbfcfd; }
+    .product-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .product-card { background:#fff; border:1px solid rgba(25,40,55,.07); border-radius:24px; overflow:hidden; transition:transform .35s, box-shadow .35s; }
+    .product-card:hover { transform:translateY(-8px); box-shadow:0 24px 55px rgba(31,49,68,.10); }
+    .product-image { min-height:270px; display:grid; place-items:center; position:relative; overflow:hidden; }
+    .product-image.blue { background:linear-gradient(140deg,#edf5fc,#dceaf7); }
+    .product-image.orange { background:linear-gradient(140deg,#fff2e9,#fce0ce); }
+    .product-image.grey { background:linear-gradient(140deg,#f3f5f7,#e7ebef); }
+    .product-image svg { width:90%; max-width:340px; filter:drop-shadow(0 18px 13px rgba(37,49,63,.16)); transition:transform .4s; }
+    .product-card:hover .product-image svg { transform:scale(1.06) rotate(-4deg); }
+    .prototype-label { position:absolute; top:17px; left:17px; background:rgba(255,255,255,.75); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.8); border-radius:99px; padding:7px 11px; font-size:9px; font-weight:850; letter-spacing:.13em; }
+    .product-info { padding:22px; }
+    .product-top { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .product-info h3 { font-size:20px; letter-spacing:-.04em; }
+    .product-code { color:var(--orange-dark); font-size:10px; font-weight:850; letter-spacing:.12em; }
+    .product-info p { color:var(--muted); font-size:12px; margin:9px 0 18px; }
+    .text-link { border:0; background:none; color:var(--ink); font-size:11px; font-weight:850; border-bottom:1px solid var(--orange); padding-bottom:4px; }
+    .story { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    .story-visual { min-height:430px; border-radius:28px; position:relative; overflow:hidden; background:linear-gradient(140deg,#eaf3fb,#f7faff 55%,#fff0e6); display:grid; place-items:center; }
+    .story-visual .big-mark { font-size:clamp(90px,14vw,180px); font-weight:950; letter-spacing:-.12em; color:rgba(82,127,174,.17); transform:rotate(-12deg); }
+    .story-stamp { position:absolute; bottom:25px; right:25px; width:110px; height:110px; border-radius:50%; background:var(--orange); color:white; display:grid; place-items:center; text-align:center; font-size:10px; line-height:1.4; font-weight:850; letter-spacing:.1em; transform:rotate(12deg); }
+    .story-copy p { color:var(--muted); font-size:14px; line-height:1.9; margin-top:22px; max-width:480px; }
+    .values { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:35px; }
+    .value { padding:17px; border:1px solid var(--line); border-radius:17px; background:rgba(255,255,255,.72); }
+    .value b { display:block; font-size:12px; margin-bottom:5px; } .value span { color:var(--muted); font-size:10px; }
+    .manifesto { padding:0 0 110px; }
+    .manifesto-box { border-radius:30px; padding:65px; overflow:hidden; position:relative; color:#fff; background:linear-gradient(115deg,#f07832,#e66c2a 48%,#527fae); }
+    .manifesto-box:after { content:"L"; position:absolute; right:3%; bottom:-45%; font-size:390px; line-height:1; font-weight:950; color:rgba(255,255,255,.10); }
+    .manifesto-box h2 { position:relative; z-index:1; max-width:620px; font-size:clamp(38px,6vw,72px); line-height:.98; letter-spacing:-.07em; }
+    .manifesto-box p { position:relative; z-index:1; max-width:390px; margin:20px 0 28px; color:rgba(255,255,255,.83); font-size:13px; }
+    .manifesto-box .btn { position:relative; z-index:1; background:#fff; color:var(--ink); }
+    .contact { background:#f8fafc; }
+    .contact-grid { display:grid; grid-template-columns:.8fr 1.2fr; gap:80px; }
+    .contact h2 { font-size:clamp(40px,5vw,64px); line-height:.98; letter-spacing:-.07em; margin-top:16px; }
+    .contact-copy p { color:var(--muted); font-size:13px; margin-top:20px; max-width:330px; line-height:1.8; }
+    .contact-form { display:grid; grid-template-columns:1fr 1fr; gap:15px; padding:28px; border-radius:24px; background:rgba(255,255,255,.75); border:1px solid rgba(255,255,255,.95); box-shadow:var(--shadow); backdrop-filter:blur(16px); }
+    .field { display:flex; flex-direction:column; gap:7px; } .field.full { grid-column:1/-1; }
+    .field label { font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .field input, .field textarea { width:100%; border:1px solid var(--line); background:rgba(248,250,252,.8); padding:14px; border-radius:12px; outline:none; font-size:13px; transition:border .2s, box-shadow .2s; }
+    .field input:focus, .field textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(82,127,174,.10); }
+    .field textarea { min-height:120px; resize:vertical; }
+    .form-note { grid-column:1/-1; color:var(--muted); font-size:10px; }
+    .form-success { display:none; grid-column:1/-1; padding:12px; border-radius:12px; color:#245b3b; background:#eaf7ef; font-size:12px; }
+    footer { padding:38px 0; background:#17191c; color:#fff; }
+    .footer-row { display:flex; align-items:center; justify-content:space-between; gap:25px; }
+    .footer-brand p { color:#9da4ad; font-size:10px; margin-top:7px; }
+    .footer-links { display:flex; gap:23px; flex-wrap:wrap; } .footer-links a { color:#c7cbd0; font-size:11px; }
+    .copyright { color:#747c85; font-size:9px; letter-spacing:.1em; margin-top:28px; padding-top:18px; border-top:1px solid rgba(255,255,255,.12); }
+
+    .modal-backdrop { display:none; position:fixed; inset:0; z-index:100; background:rgba(14,22,31,.38); backdrop-filter:blur(8px); padding:20px; align-items:center; justify-content:center; }
+    .modal-backdrop.show { display:flex; }
+    .modal { width:min(520px,100%); padding:30px; border:1px solid rgba(255,255,255,.85); border-radius:26px; background:rgba(255,255,255,.88); backdrop-filter:blur(24px); box-shadow:0 30px 100px rgba(0,0,0,.2); position:relative; animation:menuIn .25s ease both; }
+    .modal-close { position:absolute; top:17px; right:17px; border:1px solid var(--line); border-radius:50%; width:36px; height:36px; background:#fff; font-size:18px; }
+    .modal h3 { font-size:32px; letter-spacing:-.06em; margin:14px 0 8px; }
+    .modal p { color:var(--muted); font-size:13px; line-height:1.8; margin-bottom:20px; }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+    @media (prefers-reduced-motion: reduce) { *, *:before, *:after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } .reveal { opacity:1; transform:none; } }
+    @media (max-width: 850px) {
+      .nav-links, .nav-cta { display:none; } .menu-toggle { display:block; }
+      .hero { padding-top:155px; min-height:auto; } .hero-grid { grid-template-columns:1fr; }
+      .hero-art { min-height:360px; } .hero-copy { max-width:560px; }
+      .story { gap:35px; } .contact-grid { gap:35px; }
+    }
+    @media (max-width: 650px) {
+      .wrap { width:min(100% - 34px, 1160px); }
+      .announcement { font-size:8px; }
+      .nav-shell { top:33px; } .nav-shell.scrolled { top:5px; }
+      .nav { width:calc(100% - 24px); height:60px; padding:0 15px; }
+      .logo { font-size:21px; }
+      .mobile-menu { top:103px; right:12px; width:calc(100% - 24px); }
+      .hero { padding:145px 0 80px; } h1 { font-size:clamp(58px,17vw,82px); }
+      .hero-art { min-height:300px; } .tag-one { right:-3px; } .tag-two { left:-3px; }
+      section { padding:78px 0; }
+      .section-head { display:block; } .section-head p { margin-top:18px; }
+      .product-grid { grid-template-columns:1fr; }
+      .product-image { min-height:260px; }
+      .story, .contact-grid { grid-template-columns:1fr; }
+      .story-visual { min-height:300px; order:2; }
+      .values { grid-template-columns:1fr; }
+      .manifesto { padding-bottom:78px; }
+      .manifesto-box { padding:38px 26px; }
+      .manifesto-box:after { font-size:260px; right:-5%; }
+      .contact-form { grid-template-columns:1fr; padding:20px; }
+      .field.full, .form-note, .form-success { grid-column:1; }
+      .footer-row { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">A fresh step forward · LIMONEEZ sneaker concepts</div>
+  <header class="nav-shell" id="top">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="#home" aria-label="LIMONEEZ home">LIMONEEZ<span>®</span></a>
+      <div class="nav-links">
+        <a href="#home" class="active">Home</a><a href="#collection">Collection</a><a href="#story">Our story</a><a href="#contact">Contact</a>
+      </div>
+      <a class="nav-cta" href="#collection">Explore sneakers <span>↗</span></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+    </nav>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#home">Home <span>01</span></a>
+    <a href="#collection">Collection <span>02</span></a>
+    <a href="#story">Our story <span>03</span></a>
+    <a href="#contact">Contact <span>04</span></a>
+    <a class="btn btn-primary" href="#collection">Explore the collection ↗</a>
+  </div>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div class="hero-copy-block reveal">
+          <div class="eyebrow">The next step in sneaker culture</div>
+          <h1>MOVE<br><em>DIFFERENT.</em></h1>
+          <p class="hero-copy">Fresh perspective. Everyday energy. LIMONEEZ is building a new take on the everyday sneaker — made to bring a little more character to every step.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#collection">Discover the prototypes ↗</a>
+            <a class="btn btn-secondary" href="#story">Get to know us</a>
+          </div>
+          <div class="hero-note"><b>01 / 03</b> &nbsp; A new point of view on everyday sneakers</div>
+        </div>
+        <div class="hero-art reveal">
+          <div class="orbit"></div>
+          <div class="floating-tag tag-one">Prototype series<strong>LZ / 001</strong></div>
+          <div class="floating-tag tag-two">Designed for<strong>Everyday motion</strong></div>
+          <svg class="shoe-visual" viewBox="0 0 720 420" role="img" aria-label="Stylized white sneaker with orange and blue details">
+            <defs>
+              <linearGradient id="upper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#edf1f4"/><stop offset="1" stop-color="#cbd4dd"/></linearGradient>
+              <linearGradient id="sole" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#dce2e8"/></linearGradient>
+              <linearGradient id="bluePart"><stop stop-color="#7fa8d0"/><stop offset="1" stop-color="#426f9f"/></linearGradient>
+            </defs>
+            <path d="M92 274 C145 270 190 248 230 205 L300 119 C322 91 352 91 380 111 L482 190 C528 224 578 236 632 244 C662 249 683 271 682 297 L676 324 C673 344 657 356 632 359 L139 359 C101 359 72 340 70 312 C68 293 76 280 92 274Z" fill="url(#sole)" stroke="#c6cdd4" stroke-width="5"/>
+            <path d="M104 271 C158 262 203 236 245 187 L305 121 C327 96 351 98 378 116 L478 192 C522 224 576 239 630 248 C646 251 657 262 660 278 L655 294 C585 300 536 292 482 278 C416 261 356 251 292 264 C226 278 161 300 96 296Z" fill="url(#upper)" stroke="#cbd2d9" stroke-width="4"/>
+            <path d="M303 128 C329 112 347 115 367 130 L430 180 L374 236 L252 214Z" fill="#f5f7f9" stroke="#d0d7de" stroke-width="3"/>
+            <path d="M434 182 L479 214 C516 240 566 250 615 258 L600 285 C546 280 501 265 456 241 L397 211Z" fill="url(#bluePart)" opacity=".95"/>
+            <path d="M210 225 L278 147 L318 171 L270 245Z" fill="#f07832"/>
+            <path d="M283 247 L335 168 M306 255 L358 181 M329 258 L381 194" stroke="#8795a3" stroke-width="8" stroke-linecap="round"/>
+            <path d="M274 146 L348 128" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+            <path d="M110 304 C250 310 360 284 466 300 C545 312 610 318 672 302" fill="none" stroke="#aeb9c4" stroke-width="5"/>
+            <path d="M90 326 C220 348 400 334 560 341" fill="none" stroke="#fff" stroke-width="7" opacity=".9"/>
+            <circle cx="181" cy="286" r="8" fill="#527fae"/><circle cx="202" cy="279" r="6" fill="#527fae"/>
+          </svg>
+        </div>
+      </div>
+      <div class="scroll-cue">Scroll to explore ↓</div>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div class="ticker-track">
+      <span>MOVE DIFFERENT ✳</span><span>FRESH BY DESIGN ✳</span><span>EVERYDAY ENERGY ✳</span><span>LIMONEEZ SNEAKER LAB ✳</span>
+      <span>MOVE DIFFERENT ✳</span><span>FRESH BY DESIGN ✳</span><span>EVERYDAY ENERGY ✳</span><span>LIMONEEZ SNEAKER LAB ✳</span>
+    </div></div>
+
+    <section class="collection" id="collection">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="eyebrow">The first drop</div><h2>Meet the<br>prototypes.</h2></div>
+          <p>Three early concepts. One shared idea: sneakers should feel as individual as the people who wear them. Explore the direction we're taking.</p>
+        </div>
+        <div class="product-grid">
+          <article class="product-card reveal">
+            <div class="product-image blue"><span class="prototype-label">CONCEPT / 001</span>
+              <svg viewBox="0 0 420 220" role="img" aria-label="White and blue sneaker concept"><path d="M35 139 Q95 134 135 91 L180 45 Q197 28 218 45 L283 105 Q321 133 382 140 Q400 144 399 164 L394 179 L60 182 Q28 177 35 139Z" fill="#fff" stroke="#c8d4df" stroke-width="4"/><path d="M180 49 Q200 34 218 49 L274 102 L234 143 L135 115Z" fill="#eef2f6"/><path d="M265 112 Q313 139 383 147 L373 166 Q308 161 252 137Z" fill="#527fae"/><path d="M129 111 L178 57 L204 74 L166 132Z" fill="#f07832"/><path d="M185 121 L220 76 M203 132 L238 88 M220 137 L254 101" stroke="#a8b2bc" stroke-width="6" stroke-linecap="round"/><path d="M43 161 Q207 174 393 160" fill="none" stroke="#b9c5d0" stroke-width="5"/></svg>
+            </div>
+            <div class="product-info"><div class="product-top"><h3>The Everyday</h3><span class="product-code">LZ-01</span></div><p>A clean, versatile silhouette with a fresh contrast of colour.</p><button class="text-link" data-product="everyday">View concept ↗</button></div>
+          </article>
+          <article class="product-card reveal">
+            <div class="product-image orange"><span class="prototype-label">CONCEPT / 002</span>
+              <svg viewBox="0 0 420 220" role="img" aria-label="White and orange sneaker concept"><path d="M35 139 Q95 134 135 91 L180 45 Q197 28 218 45 L283 105 Q321 133 382 140 Q400 144 399 164 L394 179 L60 182 Q28 177 35 139Z" fill="#fff" stroke="#d9cfc8" stroke-width="4"/><path d="M180 49 Q200 34 218 49 L274 102 L234 143 L135 115Z" fill="#f5f0ec"/><path d="M265 112 Q313 139 383 147 L373 166 Q308 161 252 137Z" fill="#f07832"/><path d="M129 111 L178 57 L204 74 L166 132Z" fill="#527fae"/><path d="M185 121 L220 76 M203 132 L238 88 M220 137 L254 101" stroke="#b8aaa0" stroke-width="6" stroke-linecap="round"/><path d="M43 161 Q207 174 393 160" fill="none" stroke="#c9bdb5" stroke-width="5"/></svg>
+            </div>
+            <div class="product-info"><div class="product-top"><h3>The Shift</h3><span class="product-code">LZ-02</span></div><p>A bolder expression built around playful orange and blue details.</p><button class="text-link" data-product="shift">View concept ↗</button></div>
+          </article>
+          <article class="product-card reveal">
+            <div class="product-image grey"><span class="prototype-label">CONCEPT / 003</span>
+              <svg viewBox="0 0 420 220" role="img" aria-label="White and grey sneaker concept"><path d="M35 139 Q95 134 135 91 L180 45 Q197 28 218 45 L283 105 Q321 133 382 140 Q400 144 399 164 L394 179 L60 182 Q28 177 35 139Z" fill="#fff" stroke="#cbd0d5" stroke-width="4"/><path d="M180 49 Q200 34 218 49 L274 102 L234 143 L135 115Z" fill="#edf0f2"/><path d="M265 112 Q313 139 383 147 L373 166 Q308 161 252 137Z" fill="#7c8d9e"/><path d="M129 111 L178 57 L204 74 L166 132Z" fill="#f07832"/><path d="M185 121 L220 76 M203 132 L238 88 M220 137 L254 101" stroke="#aeb6be" stroke-width="6" stroke-linecap="round"/><path d="M43 161 Q207 174 393 160" fill="none" stroke="#b9c0c7" stroke-width="5"/></svg>
+            </div>
+            <div class="product-info"><div class="product-top"><h3>The Motion</h3><span class="product-code">LZ-03</span></div><p>A streamlined concept with understated tones and a sporty edge.</p><button class="text-link" data-product="motion">View concept ↗</button></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="story">
+      <div class="wrap story">
+        <div class="story-visual reveal"><div class="big-mark">LZ.</div><div class="story-stamp">FRESH<br>BY<br>DESIGN ✳</div></div>
+        <div class="story-copy reveal">
+          <div class="eyebrow">A little about us</div>
+          <h2>Designed to<br>move with you.</h2>
+          <p>LIMONEEZ is a sneaker brand in the making, driven by a simple belief: everyday footwear can have its own point of view. We're exploring clean shapes, confident colour and details that make a pair feel unmistakably yours.</p>
+          <p>These first designs are prototypes — the beginning of a bigger idea. Follow the journey as we shape what's next.</p>
+          <div class="values">
+            <div class="value"><b>Fresh thinking</b><span>New ideas, open minds.</span></div>
+            <div class="value"><b>Everyday style</b><span>Made to fit your rhythm.</span></div>
+            <div class="value"><b>Our own path</b><span>Built with character.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto">
+      <div class="wrap"><div class="manifesto-box reveal">
+        <div class="eyebrow" style="color:#fff">Your next step starts here</div>
+        <h2>Not just another pair. A different point of view.</h2>
+        <p>Get a first look at the LIMONEEZ concepts and be part of the journey from prototype to something real.</p>
+        <a class="btn" href="#contact">Stay in the loop ↗</a>
+      </div></div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="wrap contact-grid">
+        <div class="contact-copy reveal"><div class="eyebrow">Say hello</div><h2>Let's talk<br> sneakers.</h2><p>Have a question, an idea or feedback on our prototypes? Send us a note. We'd love to hear from you.</p></div>
+        <form class="contact-form reveal" id="contactForm">
+          <div class="field"><label for="name">Your name</label><input id="name" name="name" placeholder="Name" required /></div>
+          <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" placeholder="you@example.com" required /></div>
+          <div class="field full"><label for="message">Your message</label><textarea id="message" name="message" placeholder="Tell us what's on your mind..." required></textarea></div>
+          <div class="form-success" id="formSuccess" role="status">Thanks for reaching out! This demo form is ready to connect to your email service.</div>
+          <div class="field full"><button class="btn btn-primary" type="submit">Send message ↗</button></div>
+          <div class="form-note">Demo form: messages are not sent to a mailbox until you connect a form service.</div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-row">
+        <div class="footer-brand"><a class="logo" href="#home">LIMONEEZ<span>®</span></a><p>Fresh perspective. Everyday energy.</p></div>
+        <div class="footer-links"><a href="#collection">Collection</a><a href="#story">Our story</a><a href="#contact">Contact</a><a href="#home">Back to top ↑</a></div>
+      </div>
+      <div class="copyright">© <span id="year"></span> LIMONEEZ. ALL RIGHTS RESERVED. · SNEAKER CONCEPTS</div>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <div class="eyebrow">LIMONEEZ prototype series</div>
+      <h3 id="modalTitle">The Everyday</h3>
+      <p id="modalText">A clean, versatile silhouette with a fresh contrast of colour. This is an early concept and details may change as the design develops.</p>
+      <a class="btn btn-primary" href="#contact" id="modalContact">Ask us about this concept ↗</a>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Open navigation menu');
+      document.body.classList.remove('menu-open');
+    }
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closeMenu();
+      else {
+        mobileMenu.classList.add('open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        menuToggle.setAttribute('aria-label', 'Close navigation menu');
+        document.body.classList.add('menu-open');
+      }
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeMenu(); closeModal(); } });
+    document.addEventListener('click', e => {
+      if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) closeMenu();
+    });
+
+    const navShell = document.querySelector('.nav-shell');
+    window.addEventListener('scroll', () => navShell.classList.toggle('scrolled', window.scrollY > 35), { passive: true });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const modal = document.getElementById('productModal');
+    const productData = {
+      everyday: ['The Everyday', 'LZ-01 — A clean, versatile silhouette with a fresh contrast of colour. This is an early concept and details may change as the design develops.'],
+      shift: ['The Shift', 'LZ-02 — A bolder expression built around playful orange and blue details. This is an early concept and details may change as the design develops.'],
+      motion: ['The Motion', 'LZ-03 — A streamlined concept with understated tones and a sporty edge. This is an early concept and details may change as the design develops.']
+    };
+    function closeModal() { modal.classList.remove('show'); }
+    document.querySelectorAll('[data-product]').forEach(button => {
+      button.addEventListener('click', () => {
+        const data = productData[button.dataset.product];
+        document.getElementById('modalTitle').textContent = data[0];
+        document.getElementById('modalText').textContent = data[1];
+        modal.classList.add('show');
+        document.getElementById('modalClose').focus();
+      });
+    });
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.getElementById('modalContact').addEventListener('click', closeModal);
+
+    document.getElementById('contactForm').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('formSuccess').style.display = 'block';
+      e.target.reset();
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const activeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    sections.forEach(section => activeObserver.observe(section));
+  </script>
+</body>
+</html>
